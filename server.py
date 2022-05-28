@@ -1,4 +1,7 @@
+import json
 from flask import Flask
+from about_me import me
+from mock_data import catalog
 
 app = Flask('tilestore')
 
@@ -8,22 +11,28 @@ def home():
 
 @app.route("/about")
 def about():
-    me = {
-        "first": "Michael",
-        "middle": "James",
-        "last": "Costanza",
-        "suffix": "Jr",
-        "age": 26,
-    }
-    person = me["first"] + me["middle"] + me["last"] + me["suffix"] + str(me["age"])
+    return me["first"] + " " + me["middle"] + " " + me["last"] + " " + me["suffix"] + " " + str(me["age"])
+    
+@app.route("/myaddress")
+def address():
+    return f' {me["address"]["street"]} {me["address"]["city"]} {me["address"]["state"]} {me["address"]["zip"]}'
 
-    person = ""
+#########################################################################################################################
+#################################################### API ENDPOINTS ######################################################
+#########################################################################################################################
 
-    for e in me:
-        person+= str(me[e]) + " "
+@app.route("/api/catalog", methods=['GET'])
+def get_catalog():
+    return json.dumps(catalog)
 
+@app.route("/api/catalog/count", methods=['GET'])
+def get_count():
+    counts = len(catalog)
+    return json.dumps(counts)
 
-    return person
+@app.route("/api/product/<id>", methods=['GET'])
+def get_product(id):
+    return json.dumps(id)
 
 app.run(debug=True)
 
