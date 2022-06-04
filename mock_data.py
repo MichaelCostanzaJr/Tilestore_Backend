@@ -15,7 +15,7 @@ catalog = [
         "title": "Glock Gen 5",
         "image": "IMG_2573.jpeg",
         "discount": 5,
-        "category": "Misc",
+        "category": "Misc1",
       },
       {
         "_id": "2574",
@@ -24,7 +24,7 @@ catalog = [
         "title": "Live Eye",
         "image": "IMG_2574.jpeg",
         "discount": 5,
-        "category": "Misc",
+        "category": "Misc2",
       },
       {
         "_id": "2575",
@@ -33,7 +33,7 @@ catalog = [
         "title": "Motorcycle",
         "image": "IMG_2575.jpeg",
         "discount": 5,
-        "category": "Misc",
+        "category": "Misc3",
       },
       {
         "_id": "2576",
@@ -42,6 +42,6 @@ catalog = [
         "title": "Chevelle",
         "image": "IMG_2576.jpeg",
         "discount": 5,
-        "category": "Misc",
+        "category": "Misc4",
       }
     ]

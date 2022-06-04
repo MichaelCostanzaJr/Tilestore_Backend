@@ -1,5 +1,5 @@
 import json
-from flask import Flask
+from flask import Flask, abort
 from about_me import me
 from mock_data import catalog
 
@@ -32,7 +32,85 @@ def get_count():
 
 @app.route("/api/product/<id>", methods=['GET'])
 def get_product(id):
-    return json.dumps(id)
+    for prod in catalog:
+        if prod["_id"] == id:
+            return json.dumps(prod)
+
+    return abort(404, "Sorry, Id does not match any product")
+
+#@app.route("/api/catalog/total", methods=['GET']) # old way/harder
+@app.get("/api/catalog/total") # new way/easier
+def get_total():
+    total = 0
+    for prod in catalog:
+        total += prod["price"]
+
+    return json.dumps(total)
+
+@app.get("/api/products/<category>")
+def products_by_category(category):
+    results = []
+    category = category.lower()
+    for prod in catalog:
+        if prod["category"].lower() == category:
+            results.append(prod)
+    
+    return json.dumps(results)
+
+@app.get("/api/categories")
+def get_unique_categories():
+    results = []
+    for prod in catalog:
+        cat = prod["category"]
+        if not cat in results:
+            results.append(cat)
+
+    return json.dumps(results)
+
+
+
+
+
+@app.get("/api/product/cheapest")
+def get_cheapest_product():
+    solution = catalog[0]
+    for prod in catalog:
+        if prod["price"] < solution["price"]:
+            solution = prod
+
+    return json.dumps(solution) 
+
+
+
+
+
+
+
+
+@app.get("/api/exercise1")
+def get_exe1():
+    nums = [123,123,654,124,8865,532,4768,8476,45762,345,-1,234,0,-12,-456,-123,-865,532,4768]
+    solution = {}
+
+    # A: find the lowest number
+    solution["a"] = 1
+
+
+    # B: find how many numbers are lowe than 500
+    solution["b"] = 1
+
+    # C: sum all the negatives
+    solution["c"] = 1
+
+
+    # D: find the sum of numbers except negatives
+    solution["d"] = 1
+
+
+    return json.dumps(solution)
+
+
+
 
 app.run(debug=True)
 
