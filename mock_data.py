@@ -45,3 +45,26 @@ catalog = [
         "category": "Misc4",
       }
     ]
+
+coupon = [
+  {
+    "_id": "1",
+    "coupon": "ten",
+    "title": "10%-Off",
+  },
+  {
+    "_id": "2",
+    "coupon": "twenty",
+    "title": "20%-Off",
+  },
+  {
+    "_id": "3",
+    "coupon": "thirty",
+    "title": "30%-Off",
+  },
+  {
+    "_id": "4",
+    "coupon": "forty",
+    "title": "40%-Off",
+  },
+]
