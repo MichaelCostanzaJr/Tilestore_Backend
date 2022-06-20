@@ -1,11 +1,13 @@
 import json
-from flask import Flask, abort, request
+from flask import Flask, abort, request, Response
 from about_me import me
 from mock_data import catalog
 from config import db
 from bson import ObjectId
+from flask_cors import CORS
 
 app = Flask('tilestore')
+CORS(app)
 
 @app.route("/", methods=['GET'])
 def home():
@@ -170,13 +172,25 @@ def get_all_coupons():
 def save_coupon():
     try:
         coupon = request.get_json()
+
+
+        
+        
+        #valdations
         errors = ""
-        #validations
-        if not "title" in coupon or len(coupon["title"]) < 7:
-            errors += ", Title is required and should have at least 7 chars"
+
+        if not "code" in coupon or len(coupon["code"]) < 5:
+            errors += ", Title is required and should have at least 5  chars"
+
+        if not "discount" in coupon or coupon["discount"] < 1 or coupon["discount"] > 50:
+            errors += ", Discount is required and should be between 1 and 50"
 
         if errors:
-            return abort(400, errors)
+            return Response(errors, status=400)
+
+        exist = db.coupons.find_one({"code": coupon["code"]})
+        if exist:
+            return Response("A coupon already exist for that code, status= 400")
 
         db.coupons.insert_one(coupon)
 
@@ -184,20 +198,30 @@ def save_coupon():
         return json.dumps(coupon)
 
     except Exception as ex:
-        return abort(500, F"Unexpected error: {ex}")
+        print(ex)
+        return Response("Unexpected error", status=500)
 # GET CC BY CODE
 
-@app.get("/api/coupons/<coupon>")
-def coupons_by_code(coupon):
-    results = []
-    cursor = db.coupons.find({"coupon": coupon})
-    coupon = coupon.lower()
-    for cc in cursor:
-        cc["_id"] = str(cc["_id"])
-        results.append(cc)
-        
+@app.get("/api/coupons/<code>")
+def coupons_by_code(code):
+
     
-    return json.dumps(results)
+    
+        errors = ""
+
+        if not len({"code"}) < 4:
+            error += (", Code must be atleast 4 char") 
+
+        cursor = db.coupons.find_one({"code": code})
+        if not coupon:
+            return abort(404, "Coupon not found")
+    
+        coupon["_id"] = str(coupon["_id"])
+            
+        
+        return json.dumps(results)
+
+   
 
 app.run(debug=True)
 
